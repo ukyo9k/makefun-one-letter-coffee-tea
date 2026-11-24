@@ -1,0 +1,1 @@
+{"description":"One Letter: Coffee or Tea — a make.fun entry program that writes the letter A (coffee) to /output/entry.txt","engines":{"node":">=22.18"},"license":"MIT","name":"makefun-one-letter-coffee-tea","private":true,"scripts":{"start":"node main.ts"},"type":"module","version":"1.0.0"}
