@@ -24,7 +24,7 @@
 // caffeinated answer, and the letter A carries it. The word stays in
 // the README only; the entry file itself holds just the letter.
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 // The two legal letters, and the scores that pick between them.
 const CANDIDATES = [
@@ -55,6 +55,16 @@ function main(): void {
   }
   mkdirSync("/output", { recursive: true });
   writeFileSync("/output/entry.txt", letter, "utf8");
+  // Guard: read the file back and refuse to proceed unless it holds
+  // exactly the one chosen letter — no extra byte, no newline. The
+  // gate is byte-exact, so a silent write failure must be loud here
+  // instead of producing a wrong entry.
+  const written = readFileSync("/output/entry.txt", "utf8");
+  if (written !== letter) {
+    throw new Error(
+      `read-back mismatch: /output/entry.txt holds ${JSON.stringify(written)}, expected ${JSON.stringify(letter)}`,
+    );
+  }
   console.log(`Wrote ${JSON.stringify(letter)} (coffee) to /output/entry.txt`);
 }
 
